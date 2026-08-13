@@ -1,0 +1,34 @@
+name: Reassemble V38 Project
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'AnimeAscensionV38.zip.part*'
+      - '.github/workflows/reassemble-v38.yml'
+
+jobs:
+  reassemble:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reassemble V38 ZIP
+        shell: bash
+        run: |
+          cat AnimeAscensionV38.zip.part* > AnimeAscensionProjectV38_Premium2DHD.zip
+          ls -lh AnimeAscensionProjectV38_Premium2DHD.zip
+          sha256sum AnimeAscensionProjectV38_Premium2DHD.zip
+
+      - name: Verify ZIP
+        shell: bash
+        run: unzip -t AnimeAscensionProjectV38_Premium2DHD.zip
+
+      - name: Upload reconstructed project
+        uses: actions/upload-artifact@v4
+        with:
+          name: AnimeAscensionProjectV38_Premium2DHD
+          path: AnimeAscensionProjectV38_Premium2DHD.zip
+          retention-days: 30
