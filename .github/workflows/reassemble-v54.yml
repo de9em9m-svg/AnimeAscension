@@ -1,0 +1,29 @@
+name: Reassemble V54 Project
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'AnimeAscensionV54.zip.part*'
+      - '.github/workflows/reassemble-v54.yml'
+
+jobs:
+  reassemble:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reassemble V54 ZIP
+        run: cat AnimeAscensionV54.zip.part* > AnimeAscensionProjectV54_CombatPolish.zip
+
+      - name: Verify ZIP
+        run: unzip -t AnimeAscensionProjectV54_CombatPolish.zip
+
+      - name: Upload reconstructed V54 project
+        uses: actions/upload-artifact@v4
+        with:
+          name: AnimeAscensionProjectV54_CombatPolish
+          path: AnimeAscensionProjectV54_CombatPolish.zip
+          retention-days: 30
